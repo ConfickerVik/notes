@@ -75,30 +75,30 @@ class Functionality(object):
 
 
 class Verify(object):
-    def verifyXml(filename):
+    def verifyXml(document, dict_notes):
         try:
-            tree = ET.parse(filename)
-            root2 = tree.getroot()
-            if len(root2[0]) != 3:
-                return False
+            tree = ET.parse(document)
+            courses = tree.findall('todo-item')
+            num = 0
+            help = {}
+            for c in courses:
+                help[0] = c.find('name').text
+                help[1] = c.find('description').text
+                help[2] = c.find('completed').text
+                dict_notes[num] = help.copy()
+                num += 1
         except:
             return False
-        return root2
+        return print('Успешная проверка файла')
 
 
 if __name__ == "__main__":
     # Принимает файл из командной строки
     document = sys.argv[1]
     dict_notes = {}
-    root = Verify.verifyXml(document)
+    root = Verify.verifyXml(document, dict_notes)
 
     if root is not False:
-
-        for i in range(len(root)):
-            dict_notes[[i][0]] = {}
-            for j in range(len(root[i])):
-                dict_notes[i][j] = root[i][j].text
-
         print('\nTodo list:')
         for key, value in dict_notes.items():
             print(str(key + 1), '. ', '\t'.join(str(dict_notes[key][num]) for num in value), sep='')
